@@ -1,27 +1,32 @@
-var ImageKit = require("imagekit");
+import ImageKit from "imagekit";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config()
 
-var imagekit = new ImageKit({
-    publicKey : process.env.IMAGEKIT_public_key,
-    privateKey : process.env.IMAGEKIT_private_key,
-    urlEndpoint : process.env.IMAGEKIT_url_endpoint
+const imagekit = new ImageKit({
+  publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
 });
 
-function uploadFile(file) {
+function uploadfile(file){
     return new Promise((resolve, reject) => {
         imagekit.upload(
-            {
-                file: file.buffer, 
-                fileName: file.originalname,
-            },
-            function(error, result) {
-                if (error) {
-                    reject(error);
-                } else {
-                    resolve(result);
-                }
+        {
+            file: file.buffer,
+            fileName: new mongoose.Types.ObjectId().toString(),
+            folder: "mood-player-songs"
+        },
+        (error, result) => {
+            if (error) {
+            console.error("ImageKit upload error:", error);
+            reject(error);
+            } else {
+            resolve(result);
             }
+        }
         );
     });
 }
 
-module.exports = { uploadFile }; 
+export default uploadfile;
