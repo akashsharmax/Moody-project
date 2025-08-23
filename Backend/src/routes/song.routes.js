@@ -5,21 +5,21 @@ import songModel from '../models/song.model.js';
 
 const router = express.Router();
 
-// Multer in-memory storage
+
 const upload = multer({ storage: multer.memoryStorage() });
 
-// ✅ Add a new song (upload + save in DB)
+
 router.post('/songs', upload.single("audio"), async (req, res) => {
   try {
     const fileData = await uploadfile(req.file);
     const song = await songModel.create({
       title: req.body.title,
       artist: req.body.artist,
-      audio: fileData.url,   // ImageKit/Cloud URL
+      audio: fileData.url,   
       mood: req.body.mood
     });
 
-    res.status(201).json(song);  // ✅ clean response
+    res.status(201).json(song);  
   } catch (error) {
     res.status(500).json({ message: 'Error adding song', error });
   }
@@ -64,7 +64,7 @@ router.delete('/songs/:id', async (req, res) => {
   }
 });
 
-// ✅ Update a song by ID
+
 router.put('/songs/:id', async (req, res) => {
   try {
     const { title, artist, mood } = req.body;
