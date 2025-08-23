@@ -25,20 +25,19 @@ router.post('/songs', upload.single("audio"), async (req, res) => {
   }
 });
 
-// ✅ Get all songs OR filter by mood (?mood=happy)
 router.get('/songs', async (req, res) => {
   try {
     const { mood } = req.query;
     const filter = mood ? { mood } : {};
     const songs = await songModel.find(filter);
 
-    res.status(200).json(songs);   // ✅ only array
+    res.status(200).json(songs);   
   } catch (error) {
     res.status(500).json({ message: "Error fetching songs", error });
   }
 });
 
-// ✅ Get a song by ID
+
 router.get('/songs/:id', async (req, res) => {
   try {
     const song = await songModel.findById(req.params.id);
@@ -51,7 +50,7 @@ router.get('/songs/:id', async (req, res) => {
   }
 });
 
-// ✅ Delete a song by ID
+
 router.delete('/songs/:id', async (req, res) => {
   try {
     const song = await songModel.findByIdAndDelete(req.params.id);
